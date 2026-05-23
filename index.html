@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Pernikahan Erich & Rina</title>
+<style>
+  body {font-family: 'Georgia', serif; background:#fefaf6; color:#333; margin:0; text-align:center;}
+  .container {max-width:600px; margin:0 auto; padding:40px 20px;}
+  .card {background:white; border-radius:20px; padding:40px 30px; box-shadow:0 10px 30px rgba(0,0,0,0.1);}
+  h1 {font-size:2.5em; color:#b8860b; margin:10px 0;}
+  h2 {font-weight:normal; color:#555;}
+  .nama-tamu {font-size:1.5em; color:#b8860b; margin:20px 0;}
+  .btn {display:inline-block; padding:12px 30px; margin:10px; background:#b8860b; color:white; text-decoration:none; border-radius:30px;}
+  .btn:hover {background:#a3740a;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <p>Dengan hormat,</p>
+    <p>Kami mengundang</p>
+    <div class="nama-tamu" id="namaTamu">Bapak/Ibu/Saudara/i</div>
+    <p>untuk hadir di acara pernikahan kami</p>
+    
+    <h1>ERICH, A.Md., S.Kom. & Rina</h1>
+    <h2>Sabtu, 20 Desember 2026</h2>
+    <p>Hotel Grand Ballroom, Baturaja<br>Pukul 11:00 WIB</p>
+
+    <a href="#" class="btn" id="btnHadir">Konfirmasi Kehadiran</a>
+    <a href="https://maps.google.com" class="btn">Lihat Lokasi</a>
+  </div>
+</div>
+
+<script>
+// Ambil data dari CSV dan cari nama berdasarkan kode di URL
+async function loadData() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const kode = urlParams.get('to');
+  
+  if (!kode) return; // kalau tidak ada ?to=xxx, tampilkan default
+
+  const res = await fetch('tamu.csv');
+  const text = await res.text();
+  const rows = text.split('\n').slice(1); // skip header
+  
+  for (let row of rows) {
+    const [nama, kodeTamu, alamat, linkHadir] = row.split(',');
+    if (kodeTamu && kodeTamu.trim() === kode) {
+      document.getElementById('namaTamu').innerText = nama;
+      document.getElementById('btnHadir').href = linkHadir;
+      break;
+    }
+  }
+}
+loadData();
+</script>
+</body>
+</html>
